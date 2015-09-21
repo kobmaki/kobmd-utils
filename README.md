@@ -2,7 +2,7 @@
 
 ## About
 
-kobmd-utils contains some helper scripts to convert markup files into other formats. The helper scripts use [pandoc](http://pandoc.org) to convert the markup files. After converting it makes some cleanup and fixes on the converted files. The project is maintained by Uwe Ebel (kobmaki) on [https://github.com/kobmaki/kobmd-utils/](github).
+kobmd-utils contains some helper scripts to convert markup files into other formats. Primary target is the mediawiki markup. The helper scripts use [pandoc](http://pandoc.org) to convert the markup files.  After converting it makes some cleanup and fixes on the converted files. The project is maintained by Uwe Ebel (kobmaki) on [https://github.com/kobmaki/kobmd-utils/](github).
 
 
 ## Documentation
