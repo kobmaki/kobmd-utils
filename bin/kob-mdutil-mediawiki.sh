@@ -132,6 +132,12 @@ case ${1} in
 	true
 	;;
 
+    remove)
+	echo "Remov(ing) ${PROVIDES}"
+	echo "select page_title  from page where page_title like '${KOBMDUTIL_MW_NAMESPACE}:%';" | ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/sql.php 2>/dev/null| grep "\[page_title\]" | sed s/".*=> "//g > /tmp/i.mw/pages.txt
+	${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/deleteBatch.php /tmp/i.mw/pages.txt
+	;;
+    
     conf-get)
 	getConf
 	;;
@@ -197,7 +203,7 @@ case ${1} in
 	cd ${KOBMDUTIL_MW_TARGET}
 	for i in $(ls -1 *mw| sed s/".mw$"//g); do
 	    echo -n $i" ";
-	    cat $i.mw | php ${KOBMDUTIL_MW_PATH}/maintenance/edit.php ${KOBMDUTIL_MW_NAMESPACE}":"$i;
+	    cat $i.mw | ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/edit.php ${KOBMDUTIL_MW_NAMESPACE}":"$i;
 	done;
 	;;
 
