@@ -23,7 +23,7 @@ KOBMDUTIL_PANDOC_BIN=${KOBMDUTIL_PANDOC_BIN-`which pandoc`}
 KOBMDUTIL_PHP_BIN=${KOBMDUTIL_PHP_BIN-`which php6 || which php5 || which php`}
 
 # what is the namespace in the mediawiki
-KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE-MD-IMPORT:}
+KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE-MD-IMPORT}
 
 
 # template header
@@ -143,7 +143,8 @@ case ${1} in
 	;;
 
     head-mwt)
-	cat ${KOBMDUTIL_MW_FOOT} 2>/dev/null || echo "<noinclude>no KOBMDUTIL_MW_FOOT definiend</noinclude>"
+	# not nice if no head, but we don't show an error as it would be include in mw
+	cat ${KOBMDUTIL_MW_HEAD} 2>/dev/null # || echo "<noinclude>no KOBMDUTIL_MW_HEAD definiend</noinclude>" 
 	;;
 
     foot-mwt)
