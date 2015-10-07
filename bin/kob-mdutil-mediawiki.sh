@@ -17,10 +17,10 @@ PROVIDES=${PROVIDES-kob-mdutil-mediawiki}
 #
 
 # where is pandoc?
-KOBMDUTIL_PANDOC_BIN=${KOBMDUTIL_PANDOC_BIN-`which pandoc`}
+KOBMDUTIL_PANDOC_BIN=${KOBMDUTIL_PANDOC_BIN-`which pandoc 2>/dev/null`}
 
 # which php should we use?
-KOBMDUTIL_PHP_BIN=${KOBMDUTIL_PHP_BIN-`which php6 || which php5 || which php`}
+KOBMDUTIL_PHP_BIN=${KOBMDUTIL_PHP_BIN-`which php6 2>/dev/null || which php5 2>/dev/null || which php 2>/dev/null`}
 
 # what is the namespace in the mediawiki
 KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE-MD-IMPORT}
@@ -129,13 +129,14 @@ case ${1} in
 	for par in KOBMDUTIL_CONF KOBMDUTIL_PANDOC_BIN KOBMDUTIL_PHP_BIN KOBMDUTIL_MD_SOURCE KOBMDUTIL_MW_NAMESPACE KOBMDUTIL_MW_PATH  KOBMDUTIL_MW_TARGET KOBMDUTIL_MW_HEAD KOBMDUTIL_MW_FOOT; do
 	    kob_show ${par}
 	done
+
 	true
 	;;
 
     remove)
 	echo "Remov(ing) ${PROVIDES}"
-	echo "select page_title  from page where page_title like '${KOBMDUTIL_MW_NAMESPACE}:%';" | ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/sql.php 2>/dev/null| grep "\[page_title\]" | sed s/".*=> "//g > /tmp/i.mw/pages.txt
-	${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/deleteBatch.php /tmp/i.mw/pages.txt
+	echo "select page_title  from page where page_title like '${KOBMDUTIL_MW_NAMESPACE}:%';" | ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/sql.php 2>/dev/null| grep "\[page_title\]" | sed s/".*=> "//g > ${KOBMDUTIL_MW_TARGET}/pages.txt
+	${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/deleteBatch.php  ${KOBMDUTIL_MW_TARGET}/pages.txt
 	;;
     
     conf-get)
@@ -219,16 +220,33 @@ case ${1} in
 	echo "import-mw-files - import the mw files to mediawiki"
 	echo "create-fix-mw-files - do create-mw-files then fix-mw-files"
 	echo "create-fix-import-mw-files - do create-fix-mw-files then import-mw-files"
+	echo "remove - remove wiki pages under the namespace"
 	;;
     example)
 	echo "Example"
 	;;
     check)
 	echo "Check(ing)"
+
+	echo -n "Test temp. mediawiki page target dir: "
 	test -d ${KOBMDUTIL_MW_TARGET}
 	kob_status "OK directory '${KOBMDUTIL_MW_TARGET}' exist" "Error directory '${KOBMDUTIL_MW_TARGET}' not exist"
-	test -w ${KOBMDUTIL_MW_TARGET}
-	kob_status "OK directory '${KOBMDUTIL_MW_TARGET}' writeable" "Error directory '${KOBMDUTIL_MW_TARGET}' not writeable"
+
+	echo -n "Test mediawiki dir: "
+	test -w ${KOBMDUTIL_MW_PATH}
+	kob_status "OK directory '${KOBMDUTIL_MW_PATH}' writeable" "Error directory '${KOBMDUTIL_MW_TARGET}' not writeable"
+
+	echo -n "Test php exist: "
+	test -x ${KOBMDUTIL_PHP_BIN}
+	kob_status "OK php '${KOBMDUTIL_PHP_BIN}' is executable" "Error no php available"
+
+	echo -n "Test mediawiki/maintenance/sql.php:"
+	echo "show tables;"| ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/sql.php >/dev/null 2>/dev/null
+	kob_status "OK mediawiki sql.php" "Error"
+
+	echo -n "Test pandoc: "
+	test -x ${KOBMDUTIL_PANDOC_BIN}
+        kob_status "OK pandoc '${KOBMDUTIL_PANDOC_BIN}' is executable" "Error no pandoc available or not executable"
 	;;
     *)
 	echo "Usage: "${0}" [help|info|check|conf-get|example|create-mw-files|fix-mw-files|import-mw-files|create-fix-mw-files|create-fix-import-mw-files|head-mwt|foot-mwt] [--conf=CONF-FILE] [--mw-path=PathToMediawiki]"
