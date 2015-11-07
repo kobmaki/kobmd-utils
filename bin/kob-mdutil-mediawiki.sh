@@ -1,6 +1,6 @@
 #!/bin/bash
 # Author: Uwe Ebel (kobmaki)
-# Copyright by Uwe Ebel
+# Copyright: Uwe Ebel
 # License: GPL v2
 # Info: Helper skript for converting markup 
 # Info: into mediawiki language 
@@ -118,6 +118,8 @@ EOF
 
 KOBMDUTIL_CONF=${KOBMDUTIL_CONF-${2}}
 
+# derive the full name from the conf file
+KOBMDUTIL_CONF_FULL=$(pwd `dirname ${KOBMDUTIL_CONF}`)/$(basename ${KOBMDUTIL_CONF})
 
 # 2nd parameter is the configuration file, we ignore fails
 .  "${2}" 2>/dev/null
@@ -126,7 +128,7 @@ KOBMDUTIL_CONF=${KOBMDUTIL_CONF-${2}}
 case ${1} in
     info)
 	echo "Info(ing) ${PROVIDES}"
-	for par in KOBMDUTIL_CONF KOBMDUTIL_PANDOC_BIN KOBMDUTIL_PHP_BIN KOBMDUTIL_MD_SOURCE KOBMDUTIL_MW_NAMESPACE KOBMDUTIL_MW_PATH  KOBMDUTIL_MW_TARGET KOBMDUTIL_MW_HEAD KOBMDUTIL_MW_FOOT; do
+	for par in KOBMDUTIL_CONF KOBMDUTIL_CONF_FULL KOBMDUTIL_PANDOC_BIN KOBMDUTIL_PHP_BIN KOBMDUTIL_MD_SOURCE KOBMDUTIL_MW_NAMESPACE KOBMDUTIL_MW_PATH  KOBMDUTIL_MW_TARGET KOBMDUTIL_MW_HEAD KOBMDUTIL_MW_FOOT; do
 	    kob_show ${par}
 	done
 
@@ -144,7 +146,7 @@ case ${1} in
 	;;
 
     head-mwt)
-	# not nice if no head, but we don't show an error as it would be include in mw
+	# not nice if no head, but we don't show an error
 	cat ${KOBMDUTIL_MW_HEAD} 2>/dev/null # || echo "<noinclude>no KOBMDUTIL_MW_HEAD definiend</noinclude>" 
 	;;
 
@@ -158,9 +160,9 @@ case ${1} in
 	for i in $(ls -1 *.md|sed s/"\.md$"//g); do
 	    echo -n ${i}" ";
 	    ${KOBMDUTIL_PANDOC_BIN} -t mediawiki $i.md -o ${KOBMDUTIL_MW_TARGET}/${i}.$$.mw;
-	    ${0} head-mwt ${2} > ${KOBMDUTIL_MW_TARGET}/${i}.mw
+	    ${0} head-mwt ${KOBMDUTIL_CONF_FULL} > ${KOBMDUTIL_MW_TARGET}/${i}.mw
 	    cat ${KOBMDUTIL_MW_TARGET}/$i.$$.mw >> ${KOBMDUTIL_MW_TARGET}/${i}.mw
-	    ${0} foot-mwt ${2} >> ${KOBMDUTIL_MW_TARGET}/${i}.mw
+	    ${0} foot-mwt ${KOBMDUTIL_CONF_FULL} >> ${KOBMDUTIL_MW_TARGET}/${i}.mw
 	    rm ${KOBMDUTIL_MW_TARGET}/${i}.$$.mw
 	    kob_status "OK" "ERROR"
 	    done
@@ -215,6 +217,8 @@ case ${1} in
 	echo "info - info about all variables and paths"
 	echo "check - check everything is fine to run the script"
 	echo "get-conf - gives the conf file"
+	echo "head-mwt - get the head template for mediawiki"
+	echo "foot-mwt - get the foot template for mediawiki"
 	echo "create-mw-files - creates the mediawiki files from the markup files"
 	echo "fix-mw-files - fix the mediawiki files, like links, name ending md"
 	echo "import-mw-files - import the mw files to mediawiki"
