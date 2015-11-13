@@ -36,7 +36,7 @@ function decho (){
     #
     # print out, only when the variable DEBUG is not empty
     #          
-    if [ "${DEBUG}"!="" ]; then
+    if [ "${DEBUG}" != "" ]; then
 	echo $@
     fi
 }
@@ -76,7 +76,7 @@ function mwFixNameSpaceLinks () {
     #
     # fix links to namespace
     #
-    echo -n "fixing name space links "
+    echo -n "fixing name space links ..."
     local aText
     local aReplace
     local i
@@ -155,21 +155,23 @@ case ${1} in
 	;;
     
     create-mw-files)
+	kob_status "Create mediawiki-files"
 	cd ${KOBMDUTIL_MD_SOURCE} || kob_status "" "ERROR could not change to ${KOBMDUTIL_MD_SOURCE} "
 	mkdir ${KOBMDUTIL_MW_TARGET} 2>/dev/null
 	for i in $(ls -1 *.md|sed s/"\.md$"//g); do
-	    echo -n ${i}" ";
+	    echo -n "copy "${i}" ";
 	    ${KOBMDUTIL_PANDOC_BIN} -t mediawiki $i.md -o ${KOBMDUTIL_MW_TARGET}/${i}.$$.mw;
 	    ${0} head-mwt ${KOBMDUTIL_CONF_FULL} > ${KOBMDUTIL_MW_TARGET}/${i}.mw
 	    cat ${KOBMDUTIL_MW_TARGET}/$i.$$.mw >> ${KOBMDUTIL_MW_TARGET}/${i}.mw
 	    ${0} foot-mwt ${KOBMDUTIL_CONF_FULL} >> ${KOBMDUTIL_MW_TARGET}/${i}.mw
 	    rm ${KOBMDUTIL_MW_TARGET}/${i}.$$.mw
 	    kob_status "OK" "ERROR"
-	    done
+	done
+	kob_status "finished create mediawiki-files"
 	;;
 
     fix-mw-files)
-	echo -n "Fixing files"
+	kob_status "Fixing created mediawiki files"
 	cd ${KOBMDUTIL_MW_TARGET}
 	cd ${KOBMDUTIL_MW_TARGET} || kob_status "" "ERROR could not change to ${KOBMDUTIL_MW_TARGET}"
 	sed --follow-symlinks -i 's/^= <a.*a>/=/g' *.mw
@@ -187,7 +189,7 @@ case ${1} in
 	    sed --follow-symlinks -i "s/\[\[${i}.md/${KOBMDUTIL_MW_NAMESPACE}:${i}/" ${KOBMDUTIL_MW_TARGET}/$i.mw
 
 	    done
-	echo " finished"
+	kob_status "finished"
 	;;
     
     create-fix-mw-files)
@@ -203,12 +205,13 @@ case ${1} in
 	;;
 
     import-mw-files)
-	echo "Importing"
+	kob_status "Importing files to mediawiki via edit.php"
 	cd ${KOBMDUTIL_MW_TARGET}
 	for i in $(ls -1 *mw| sed s/".mw$"//g); do
 	    echo -n $i" ";
 	    cat $i.mw | ${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/edit.php ${KOBMDUTIL_MW_NAMESPACE}":"$i;
 	done;
+	kob_status "finished importing"
 	;;
 
     help)
