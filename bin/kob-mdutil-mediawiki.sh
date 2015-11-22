@@ -119,7 +119,7 @@ EOF
 KOBMDUTIL_CONF=${KOBMDUTIL_CONF-${2}}
 
 # derive the full name from the conf file
-KOBMDUTIL_CONF_FULL=$(pwd `dirname ${KOBMDUTIL_CONF}`)/$(basename ${KOBMDUTIL_CONF})
+KOBMDUTIL_CONF_FULL=$(pwd `dirname ${KOBMDUTIL_CONF} 2>/dev/null`)/$(basename ${KOBMDUTIL_CONF} 2>/dev/null)
 
 # 2nd parameter is the configuration file, we ignore fails
 .  "${2}" 2>/dev/null
