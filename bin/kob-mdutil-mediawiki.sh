@@ -24,7 +24,7 @@ KOBMDUTIL_PHP_BIN=${KOBMDUTIL_PHP_BIN-`which php6 2>/dev/null || which php5 2>/d
 
 # what is the namespace in the mediawiki
 KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE-MD-IMPORT}
-
+KOBMDUTIL_MW_CATEGORIES=${KOBMDUTIL_MW_CATEGORIES-""}
 
 # template header
 KOBMDUTIL_MW_HEAD=${KOBMDUTIL_MW_HEAD-mw-head.mwt}
@@ -93,26 +93,32 @@ function mwFixNameSpaceLinks () {
 
 function getConf () {
 cat <<EOF
-#
-# Configuration for ${0}
+# Start of configuration for $(basename ${0})
 # Created: $(date)
 # by: $(id -un) on $(hostname -f)
+
+# Where is the pandoc binary?
 KOBMDUTIL_PANDOC_BIN=${KOBMDUTIL_PANDOC_BIN}
 
-# directory location of the markup files
+# Directory location of the markdown files.
 KOBMDUTIL_MD_SOURCE=${KOBMDUTIL_MD_SOURCE}
 
-# directory location for the created mediawiki file
+# Directory location for the created mediawiki file to save in.
 KOBMDUTIL_MW_TARGET=${KOBMDUTIL_MW_TARGET}
-# where is the mediawiki installed?
+
+# Where is the mediawiki installed?
 KOBMDUTIL_MW_PATH=${KOBMDUTIL_MW_PATH}
-# which namespace should we use?
+
+# Which namespace should we use?
 KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE} 
 
+# Which global additional head should be used?
 KOBMDUTIL_MW_HEAD=${KOBMDUTIL_MW_HEAD}
-KOBMDUTIL_MW_FOOT=${KOBMDUTIL_MW_FOOT}
-#
 
+# Which global additional footer should be used?
+KOBMDUTIL_MW_FOOT=${KOBMDUTIL_MW_FOOT}
+
+#End of configuration for $(basename ${0})
 EOF
 }
 
@@ -128,7 +134,7 @@ KOBMDUTIL_CONF_FULL=$(pwd `dirname ${KOBMDUTIL_CONF} 2>/dev/null`)/$(basename ${
 case ${1} in
     info)
 	echo "Info(ing) ${PROVIDES}"
-	for par in KOBMDUTIL_CONF KOBMDUTIL_CONF_FULL KOBMDUTIL_PANDOC_BIN KOBMDUTIL_PHP_BIN KOBMDUTIL_MD_SOURCE KOBMDUTIL_MW_NAMESPACE KOBMDUTIL_MW_PATH  KOBMDUTIL_MW_TARGET KOBMDUTIL_MW_HEAD KOBMDUTIL_MW_FOOT; do
+	for par in KOBMDUTIL_CONF KOBMDUTIL_CONF_FULL KOBMDUTIL_PANDOC_BIN KOBMDUTIL_PHP_BIN KOBMDUTIL_MD_SOURCE KOBMDUTIL_MW_NAMESPACE KOBMDUTIL_MW_CATEGORIES KOBMDUTIL_MW_PATH  KOBMDUTIL_MW_TARGET KOBMDUTIL_MW_HEAD KOBMDUTIL_MW_FOOT; do
 	    kob_show ${par}
 	done
 
