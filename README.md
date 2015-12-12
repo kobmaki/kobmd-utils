@@ -7,7 +7,7 @@ kobmd-utils contains some helper scripts to convert markup files into other form
 
 ## Documentation
 
-You found the documention under [doc/](doc/) and start with page [doc/00-A-documentation.md](documenation).
+You found the documention under [doc/](doc/) and start with page [documentation](doc/00-A-documentation.md).
 
 ## Usage
 
