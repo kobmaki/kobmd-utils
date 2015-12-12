@@ -32,6 +32,9 @@ KOBMDUTIL_MW_HEAD=${KOBMDUTIL_MW_HEAD-mw-head.mwt}
 # template footer
 KOBMDUTIL_MW_FOOT=${KOBMDUTIL_MW_FOOT-mw-foot.mwt}
 
+# where is mediawiki installed
+KOBMDUTIL_MW_PATH=${KOBMDUTIL_MW_PATH}
+
 function decho (){
     #
     # print out, only when the variable DEBUG is not empty
@@ -101,7 +104,7 @@ cat <<EOF
 KOBMDUTIL_PANDOC_BIN=${KOBMDUTIL_PANDOC_BIN}
 
 # Directory location of the markdown files.
-KOBMDUTIL_MD_SOURCE=${KOBMDUTIL_MD_SOURCE}
+KOBMDUTIL_MD_SOURCE=${KOBMDUTIL_MD_SOURCE-$(pwd)}
 
 # Directory location for the created mediawiki file to save in.
 KOBMDUTIL_MW_TARGET=${KOBMDUTIL_MW_TARGET}
@@ -147,16 +150,16 @@ case ${1} in
 	${KOBMDUTIL_PHP_BIN} ${KOBMDUTIL_MW_PATH}/maintenance/deleteBatch.php  ${KOBMDUTIL_MW_TARGET}/pages.txt
 	;;
     
-    conf-get)
+    conf-get|get-conf)
 	getConf
 	;;
 
-    head-mwt)
+    head-mwt|mwt-head)
 	# not nice if no head, but we don't show an error
 	cat ${KOBMDUTIL_MW_HEAD} 2>/dev/null # || echo "<noinclude>no KOBMDUTIL_MW_HEAD definiend</noinclude>" 
 	;;
 
-    foot-mwt)
+    foot-mwt|mwt-foot)
 	cat ${KOBMDUTIL_MW_FOOT} 2>/dev/null || echo "[[Category:${KOBMDUTIL_MW_NAMESPACE}]]"
 	;;
     
