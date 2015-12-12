@@ -11,14 +11,14 @@ You found the documention under [doc/](doc/) and start with page [doc/00-A-docum
 
 ## Usage
 
-For the usage of the helper files, please start with page [doc/40-A-usage.md](usage).
+For the usage of the helper files, please start with page [usage](doc/40-A-usage.md).
 
 ## Installation
 
-For installation start with page [doc/00-B-installation.md](installation).
+For installation start with page [installation](doc/00-B-installation.md).
 
 ## Contact
-For contact info look at page [doc/00-D-contact.md](contact).
+For contact info look at page [contact](doc/00-D-contact.md).
 
 ## Copyright
 
