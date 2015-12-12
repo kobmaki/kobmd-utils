@@ -14,3 +14,7 @@ on different distributions. Only a few examples.
     yum install -y pandoc
 
 
+=======
+# Installation
+INSTALLATION
+

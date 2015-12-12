@@ -24,13 +24,13 @@ KOBMDUTIL_PHP_BIN=${KOBMDUTIL_PHP_BIN-`which php6 2>/dev/null || which php5 2>/d
 
 # what is the namespace in the mediawiki
 KOBMDUTIL_MW_NAMESPACE=${KOBMDUTIL_MW_NAMESPACE-MD-IMPORT}
-KOBMDUTIL_MW_CATEGORIES=${KOBMDUTIL_MW_CATEGORIES-""}
 
 # template header
 KOBMDUTIL_MW_HEAD=${KOBMDUTIL_MW_HEAD-mw-head.mwt}
 
 # template footer
 KOBMDUTIL_MW_FOOT=${KOBMDUTIL_MW_FOOT-mw-foot.mwt}
+
 
 # where is mediawiki installed
 KOBMDUTIL_MW_PATH=${KOBMDUTIL_MW_PATH}
@@ -120,8 +120,9 @@ KOBMDUTIL_MW_HEAD=${KOBMDUTIL_MW_HEAD}
 
 # Which global additional footer should be used?
 KOBMDUTIL_MW_FOOT=${KOBMDUTIL_MW_FOOT}
+#
 
-#End of configuration for $(basename ${0})
+
 EOF
 }
 
