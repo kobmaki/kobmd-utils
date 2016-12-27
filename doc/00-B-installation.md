@@ -1,4 +1,5 @@
 # Installation of kobmd-utils
+[back](00-A-documentation.md)
 * Get a git-clone for this repository [kobmd-utils](https://github.com/kobmaki/kobmd-utils)
 * The texttool [pandoc](http://pandoc.org) is required.
 
